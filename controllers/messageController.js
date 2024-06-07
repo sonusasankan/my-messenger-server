@@ -9,8 +9,12 @@ export const getMessages = async (req, res) => {
         { sender, receiver },
         { sender: receiver, receiver: sender }
       ]
-    }).sort({ timestamp: 1 });
-    res.json(messages);
+    }).sort({ timestamp: -1 }).limit(10).exec();
+    
+    // Reverse the messages to maintain the correct order
+    const orderedMessages = messages.reverse();
+    
+    res.json(orderedMessages);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
