@@ -5,6 +5,8 @@ import cors from 'cors';
 
 //Routes
 import messageRoutes from './routes/messageRoutes.js';
+import friendListRoutes from './routes/friendListRoutes.js';
+
 
 const app = express();
 
@@ -35,6 +37,7 @@ mongoose.connect(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology:
 });
 
 app.use("/api/messages", messageRoutes);
+app.use("/api/friends", friendListRoutes);
 
 
 app.listen(PORT, () => {
