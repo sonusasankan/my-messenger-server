@@ -59,3 +59,25 @@ export const getMostRecentFriend = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const loadMore = async (req, res) => {
+  try {
+    const { sender, receiver, before, limit = 10 } = req.query;
+    const query = {
+      $or: [
+        { sender, receiver },
+        { sender: receiver, receiver: sender }
+      ]
+    };
+    if (before) {
+      query.timestamp = { $lt: before };
+    }
+    const messages = await Message.find(query)
+      .sort({ timestamp: -1 })
+      .limit(parseInt(limit))
+      .exec();
+    res.json(messages);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
