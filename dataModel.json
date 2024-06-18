@@ -1,0 +1,11 @@
+{
+    "user": {
+        "id": "unique identifier",
+        "username": "username",
+        "password": "password",
+        "email": "email",
+        "profilePicture": "image",
+        "createdAt": "date",
+        "updatedAt": "date"
+    }
+}

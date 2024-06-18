@@ -6,7 +6,8 @@ import cors from 'cors';
 //Routes
 import messageRoutes from './routes/messageRoutes.js';
 import friendListRoutes from './routes/friendListRoutes.js';
-
+import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/auth.js'
 
 const app = express();
 
@@ -36,8 +37,10 @@ mongoose.connect(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology:
     process.exit(1); // Exit the application if connection fails
 });
 
+app.use('/api/auth', authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/friends", friendListRoutes);
+app.use("/api/users", userRoutes);
 
 
 app.listen(PORT, () => {

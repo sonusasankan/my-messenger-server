@@ -41,4 +41,40 @@ export const getFriends = async (req, res) => {
   }
 };
 
+export const addFriends = async (req, res) => {
+  try {
+    const { userId, friendId } = req.body;
+
+    // Find the user's friend list
+    let friendList = await FriendList.findOne({ user: userId });
+
+    // If no friend list exists for the user, create one
+    if (!friendList) {
+      friendList = new FriendList({ user: userId, friends: [] });
+    }
+
+    // Check if the friend already exists in the list
+    const isFriendAlreadyAdded = friendList.friends.some(
+      (friend) => friend.toString() === friendId
+    );
+
+    if (isFriendAlreadyAdded) {
+      return res.status(400).json({ error: 'Friend is already in the list' });
+    }
+
+    // Add the new friend to the list
+    friendList.friends.push(friendId);
+
+    // Save the updated friend list
+    await friendList.save();
+
+    // Optionally, you can populate the friend data before sending the response
+    const populatedFriendList = await friendList.populate('friends').execPopulate();
+
+    res.status(200).json(populatedFriendList);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 
