@@ -24,7 +24,7 @@ app.use(express.json())
 
 //env configuration
 dotenv.config();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 80;
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -43,6 +43,6 @@ app.use("/api/friends", friendListRoutes);
 app.use("/api/users", userRoutes);
 
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
