@@ -13,7 +13,7 @@ const app = express();
 
 // Customize CORS options
 const corsOptions = {
-    origin: 'http://localhost:3000', // Replace with the allowed origin(s)
+    origin: ['http://localhost:3000', 'https://d2q5wwjoo6qxf2.cloudfront.net/login'], // Replace with the allowed origin(s)
     methods: 'GET,POST', // Allow only specified HTTP methods
     allowedHeaders: 'Content-Type,Authorization', // Allow only specified headers
 };
