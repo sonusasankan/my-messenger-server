@@ -11,15 +11,33 @@ import authRoutes from './routes/auth.js'
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://d2q5wwjoo6qxf2.cloudfront.net'
+];
+
 // Customize CORS options
 const corsOptions = {
-    origin: ['http://localhost:3000', 'https://d2q5wwjoo6qxf2.cloudfront.net'], // Replace with the allowed origin(s)
-    methods: 'GET,POST', // Allow only specified HTTP methods
-    allowedHeaders: 'Content-Type,Authorization', // Allow only specified headers
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // Allow requests with no origin (like mobile apps, curl requests)
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 204
 };
 
 // Use CORS middleware to allow all origins during development
 app.use(cors(corsOptions));
+
+// Ensure preflight requests are handled correctly
+app.options('*', cors(corsOptions));
+
 app.use(express.json())
 
 //env configuration
