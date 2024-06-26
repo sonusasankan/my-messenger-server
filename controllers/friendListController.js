@@ -77,6 +77,15 @@ export const addFriends = async (req, res) => {
     // Save the updated friend list
     await friendList.save();
 
+    //fetch the user
+    const user = await User.findById(userId);
+
+    // Only set hasFriends to true if it's currently false
+    if (!user.hasFriends) {
+      user.hasFriends = true;
+      await user.save();
+    }
+
      // Find the newly added friend's data
      const newFriend = await User.findById(friendId).select('-password'); // Exclude the password field
 
@@ -114,6 +123,15 @@ export const removeFriends = async (req, res) => {
 
     // Save the updated friend list
     await friendList.save();
+
+    // Check if the friend list is empty and update user
+    if (friendList.friends.length === 0) {
+      const user = await User.findById(userId);
+      if (user) {
+        user.hasFriends = false;
+        await user.save();
+      }
+    }
 
     // Find the removed friend's data
     const removedFriend = await User.findById(friendId).select('-password'); // Exclude the password field

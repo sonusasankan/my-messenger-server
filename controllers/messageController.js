@@ -25,6 +25,16 @@ export const sendMessage = async (req, res) => {
     const { sender, receiver, message } = req.body;
     const newMessage = new Message({ sender, receiver, message });
     await newMessage.save();
+
+    //fetch the user
+    const user = await User.findById(sender);
+
+    // Only set hasMessages to true if it's currently false
+    if (!user.hasMessages) {
+      user.hasMessages = true;
+      await user.save();
+    }
+
     res.status(201).json(newMessage);
   } catch (error) {
     res.status(400).json({ error: error.message });

@@ -4,10 +4,11 @@ import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
   try {
-    const { username, email, password, profilePicture } = req.body;
-    const user = new User({ username, email, password, profilePicture });
+    const { username, email, password, profilePicture, hasFriends, hasMessages } = req.body;
+    const user = new User({ username, email, password, profilePicture, hasFriends, hasMessages });
     await user.save();
-    res.status(201).json(user);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.status(201).json({user, token});
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

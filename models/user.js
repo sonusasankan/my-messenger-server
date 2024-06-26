@@ -19,6 +19,12 @@ const UserSchema = new mongoose.Schema({
    profilePicture : {
     type: String,
    },
+   hasFriends : {
+    type: Boolean
+   },
+   hasMessages : {
+    type: Boolean
+   },
    createdAt : {
      type: Date,
      default: Date.now,
